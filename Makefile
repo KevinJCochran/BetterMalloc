@@ -1,11 +1,11 @@
 all: test.c libbm.a
 	gcc -o testrun test.c libbm.a
 
-libbm.a: my-malloc.o
-	ar r libbm.a my-malloc.o
+libbm.a: mymalloc.o
+	ar r libbm.a mymalloc.o
 
-my-malloc.o: my-malloc.c my-malloc.h
-	gcc -c my-malloc.c
+mymalloc.o: mymalloc.c mymalloc.h
+	gcc -c mymalloc.c
 
 clean:
 	rm *.o
