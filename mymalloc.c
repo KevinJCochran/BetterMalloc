@@ -6,6 +6,21 @@
  * my-malloc.c
  */
 
+//size of memEntries 
+static const int entriesSize = SIZE/sizeof(MemEntry)+1;
+static void *memEntries[SIZE/sizeof(MemEntry)+1];
+
+static int getIndex()
+{
+    int i;
+    for(i = 0; i < entriesSize;i++)
+    {
+        if(memEntries[i] == 0)
+            return i;
+    }
+    return 1;
+}
+
 void *BMalloc(size_t size, char* file, int line)
 {
     printf("Starting BMalloc...\n");
@@ -28,6 +43,7 @@ void *BMalloc(size_t size, char* file, int line)
                 *temp = newEntry;
                 temp->entrySize = (entry->entrySize)-(size)-(sizeof(MemEntry));
                 temp->free = 1;
+                memEntries[getIndex()] = temp; 
                 temp->next = entry->next;
                 temp->prev = entry;
                 entry->entrySize = size;
@@ -57,6 +73,7 @@ void *BMalloc(size_t size, char* file, int line)
         entry->entrySize = size;
         entry->free = 0;
         entry->next = temp;
+        memEntries[getIndex()] = allMem;
         return (entry+1);
     }
 
@@ -74,41 +91,39 @@ void BFree(void *p, char *file, int line)
 
     if(p == NULL)
     {
-        printf("Pointer is NULL in file, free failed\n");
+        printf("Pointer is NULL, free failed\n");
         return;
     }
 
     ptr = (MemEntry*)((char*)p - sizeof(MemEntry));
 
-    int j;
-    static int i = 0; 
-    for(j = 0; j<i;i++)
+    int i;
+    int valid = 0;
+    //static int i = 0; 
+    for(i = 0; i<entriesSize;i++)
     { 
-    if(ptr == NULL)
+       if(ptr == memEntries[i] && !ptr->free)
+       {
+          valid = 1;
+          break; 
+       }
+    }
+    if(!valid)
     {
         printf("Error: Memory has already been freed\n");
-        return; 
-    }}
-    
+        return;
+    } 
     if((prev = ptr->prev) != 0 && prev->free)
     {
         //the previous chunk is free,so
         //merge this chunk with the previous chunk
         prev->entrySize += sizeof(MemEntry) + ptr->entrySize;
-
-        prev->next = ptr->next;
-        //begin added
-        ptr->free = 1;
-        prev->next = ptr->next;
-        if(ptr->next != 0)
-            ptr->next->prev = prev;
-        //end added
+        memEntries[i] = 0;
         printf("freeing block %#x merging with predecessor new size id %d\n", p, prev->entrySize);
     }
     else
     {
         printf("freeing block %#x\n", p);
-       // allMem[i++] = ptr;
         //not setting memEntry to null b/c not necessarily removing it, just free=1
         ptr->free = 1;
         prev = ptr; //used for the step below
@@ -117,14 +132,15 @@ void BFree(void *p, char *file, int line)
     {
         //the next chunk free, merge with it
         prev->entrySize += sizeof(MemEntry) + next->entrySize;
-        prev->next = next->next; //current = next->next
-        //begin added 
-        prev->free = 1;
-        
-        if(next->next != 0)
-            next->next->prev = prev;
-        //end added
-       // allMem[i++] = ptr;
+        prev->next = next->next; 
+        for(i = 0;i < entriesSize; i++)
+        {
+            if(next == memEntries[i])
+            {
+                memEntries[i] = 0;
+                break;
+            }
+        }
         printf("freeing block %#x merging with successor new size is %d\n",p,prev->entrySize);
     }
 }

@@ -12,10 +12,14 @@ int main(int argc, char ** argv)
 
     printf("\nReturn value: %x\n",test);
     strcpy(test,"Hello World!");
+    
+    printf("%s, \n",test);
     free(test);
     
+    printf("%s,\n",test);
+    free(test); 
     printf("\nReturn value: %x\n",test);
-
+    
 //=======================================================//
 
     in = 25;
