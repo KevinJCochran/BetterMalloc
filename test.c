@@ -12,6 +12,9 @@ int main(int argc, char ** argv)
 
     printf("\nReturn value: %x\n",test);
     strcpy(test,"Hello World!");
+    free(test);
+    
+    printf("\nReturn value: %x\n",test);
 
 //=======================================================//
 

@@ -3,6 +3,7 @@
 #define SIZE 500
 #define KEY_VALUE 8483938
 #define malloc(x) BMalloc((x),__FILE__,__LINE__)
+#define free(x) BFree((x),__FILE__,__LINE__)
 /*
  * my-malloc.h
  */
@@ -33,5 +34,5 @@ struct MemEntry_
  */
 void *BMalloc(size_t size, char* file, int line);
 
-void *BFree(void *ptr);
+void BFree(void *ptr,char *file,int line);
 #endif
