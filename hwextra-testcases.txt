@@ -1,0 +1,26 @@
+Test cases:
+
+test0:
+    General test. Calls malloc 4 times and check to make sure data
+    is properly stored. Then frees all allocated memory and checks
+    for an errors. Works if no errors are printed.
+
+test1:
+    Attempt to free a pointer twice. Starts by allocating memory
+    and then tries to free pointer to allocated memory twice. prints
+    error message upons second call of free.
+
+test2:
+    Attempt to free an un-allocated pointer. Creates an integer i and
+    passed address of i to free. Because this address is not within
+    the static char array, it will print an error.
+
+test3:
+    Attempt to free a bad pointer. Starts by allocating memory and then
+    adds 5 to the pointer. Because this is a bad pointer, free prints
+    an error message.
+
+test4:
+    Attempt to allocate too much memory. Simple test case that attempts
+    to allocate 5000 bytes of memory. Because this is the size of the
+    char array, it can not fit inside and will print error message.

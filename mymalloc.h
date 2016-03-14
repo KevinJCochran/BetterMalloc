@@ -1,9 +1,9 @@
 #ifndef MY_MALLOC_H
 #define MY_MALLOC_H
-#define SIZE 500
+#define SIZE 5000
 #define KEY_VALUE 8483938
-#define malloc(x) BMalloc((x),__FILE__,__LINE__)
-#define free(x) BFree((x),__FILE__,__LINE__)
+#define malloc(x) mymalloc((x),__FILE__,__LINE__)
+#define free(x) myfree((x),__FILE__,__LINE__)
 /*
  * my-malloc.h
  */
@@ -32,7 +32,7 @@ struct MemEntry_
  * Takes unsigned int "size" and Returns void pointer to 
  * allocated memory of size "size" or NULL if unsuccessful.
  */
-void *BMalloc(size_t size, char* file, int line);
+void *mymalloc(size_t size, char* file, int line);
 
-void BFree(void *ptr,char *file,int line);
+void myfree(void *ptr,char *file,int line);
 #endif

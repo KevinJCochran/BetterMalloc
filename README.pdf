@@ -1,0 +1,23 @@
+# BetterMalloc
+Memory allocator that can detect common dynamic memory programming errors.  
+
+The Better Memory allocator starts with a static char array and uses
+it as space for memory allocation. A struct defines MemEntry which is used
+to keep track of requested memory. A KEY VALUE is defined to properly
+identify MemEntries within the static char array. Two functions are
+implemented, mymalloc() and myfree().
+
+mymalloc() will attempt to find space within the char array and return a
+pointer to the requested memory. mymalloc() will first look for previously
+freed MemEntries that the requested memory could be placed. If found, 
+mymalloc() will slice the amount requested and create a new entry for
+the remaining memory. Otherwise, the memory will be sliced off the end and
+a new entry will be created for the remaining char array. If the users
+attempts to more memory than their is availible, then an error will
+be printed with the file and line number of the error.
+
+myfree() takes a pointer that was previously returned by malloc() and 
+sets the free field of the MemEntry to 1 so it can be used in later 
+malloc() calls. If the user attempts to free and pointer twice, free an
+un-allocated pointer or free a bad pointer, then an error will print
+with the file and line number of the error.
