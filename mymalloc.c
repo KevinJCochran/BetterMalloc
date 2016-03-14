@@ -133,6 +133,7 @@ void BFree(void *p, char *file, int line)
         //the next chunk free, merge with it
         prev->entrySize += sizeof(MemEntry) + next->entrySize;
         prev->next = next->next; 
+        prev->free = 1;
         for(i = 0;i < entriesSize; i++)
         {
             if(next == memEntries[i])
