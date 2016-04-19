@@ -59,7 +59,6 @@ void *mymalloc(size_t size, char* file, int line)
     }
 
     //Too much memory requested.
-    printf("File:%s:line:%d:ERROR:Too much memory requested\n",file,line);
     return NULL;
 }
 
